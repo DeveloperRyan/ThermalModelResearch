@@ -7,6 +7,9 @@ def main():
     print(path)
 
     for folder in os.listdir(path):
+        if folder == "Processed":
+            continue
+            
         print(folder)
         temp_path = path + "\\" + folder
         for file in os.listdir(temp_path):
