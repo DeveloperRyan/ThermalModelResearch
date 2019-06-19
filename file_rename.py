@@ -5,14 +5,14 @@ import os # Import the OS library
 
 def main(): # Define the main function
     path = "C:\\Users\\Ryan\\Desktop\\test" # Define the initial path of the non-processed images
+    img_number = 0 # Image counter for naming the images
 
     for folder in os.listdir(path): # Loop through each folder in path
-    if folder == "Processed": # If Processed is the name of the current folder
+        if folder == "Processed": # If Processed is the name of the current folder
             continue # Skip to the next loop
 
         temp_path = path + "\\" + folder # Temporary path for each folder
 
-        img_number = 0 # Image counter for naming the images
         for file in os.listdir(temp_path): # Loop through each file within each folder
             size = (os.path.getsize(temp_path + "\\" + file)) / 1024 # Get the file size and convert it to KB
             size = round(size, 2) # Round file size to 2 decimal places
