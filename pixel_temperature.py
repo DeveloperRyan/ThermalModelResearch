@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 
-# TODO : Use a more accurate temperature formula that accounts for emissivity
+# TODO : Use a more accurate temperature formula that accounts for emissivity - Complete?
+# Change equation to account for temperature range rather than having to re-calculate a formula
 # Allow a user to click a point for the color rather than instantly taking what is under the cursor
+# Add averaging and rounding since colors not always bnw due to low quality rasterization
 # GUI ?
 # Area Selection
 
 import pyautogui
+import math
 
 # Get the color of the pixel the mouse cursor is over and correlate this to a temperature in Celsius
 def run():
     # Correlates to temperature range of the color scale
-    MIN_TEMP = -20
-    MAX_TEMP = 10
-    RANGE = abs(MAX_TEMP - MIN_TEMP) # Gets the total range the temperatures span
+    MIN_TEMP = 15
+    MAX_TEMP = 40
+    range = abs(MAX_TEMP - MIN_TEMP) # Gets the total range the temperatures span
 
     # Take the screenshot of of the screen & then get the color of the pixel under the mouse pointer
     img = pyautogui.screenshot()
@@ -28,7 +31,9 @@ def run():
         # Function to calculate color distribution based on temperature range.
         # 255 is for 255 color range in grayscale (0-255)
         # Original function : f(x, y, z) = (((|z-y|)/255)*x)+y x:color, y: min, z: max
-        temp = ((RANGE)/255) * color + MIN_TEMP
+
+        # Equation calculted using camera calibration measurement data - See PixelTemp.xlsx
+        temp = 0.1094 * color + 17.381
         temp = round(temp, 5) # Round the temperature to 2 decimal decimal places
         print("Color: {}\nTemperature: {} \xb0C".format(color, temp)) # Output the formatted temperature
 
