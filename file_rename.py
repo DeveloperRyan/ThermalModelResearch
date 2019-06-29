@@ -9,8 +9,6 @@ root = Tk()
 root.withdraw()
 
 def main(): # Define the main function
-
-    # Code to get directory path & confirm
     # (Choosing a folder like the main drive will iteratively open, rename, and move all photos it finds smaller than 500 KB)
     while True: # Emulate Do-While loop
         search_path = askdirectory(title='Choose Search Directory') # Define the initial path of the non-processed images
@@ -32,25 +30,18 @@ def main(): # Define the main function
         else:
             continue
 
-
     img_number = 0 # Image counter for naming the images
 
-    output_path = askdirectory(tile='Choose Output Directory') + "/output"
+    output_path = askdirectory(title='Choose Output Directory') + "/output"
+    os.mkdir(output_path)
 
-    for folder in os.listdir(search_path): # Loop through each folder in path
-        if folder == "Processed": # If Processed is the name of the current folder
-            continue # Skip to the next loop
-
-        temp_path = search_path + "\\" + folder # Temporary path for each folder
-
-        for file in os.listdir(temp_path): # Loop through each file within each folder
-            size = (os.path.getsize(temp_path + "\\" + file)) / 1024 # Get the file size and convert it to KB
-            size = round(size, 2) # Round file size to 2 decimal places
-            print("File: {}\nSize: {} KB".format(file, size)) # Print each file & size
-
-            if size < 500: # Checking files under 500 KB, all thermal images we are working with are under this size
-                img_number += 1 # Raise the number by one for each image
-                os.rename(temp_path + "\\" + file, output_path + "Processed IMG_{}.JPG".format(img_number)) # Rename and move all the
+    for root, dirs, files in os.walk(search_path, topdown=False): # Walk through all directories found within the search path
+        for file in files: # Loop all files found
+            if '.jpg' in file.lower() or '.jpeg' in file.lower(): # If the file is a .jpg / .jpeg
+                if os.path.getsize(root + '/' + file) / 1000 < 500: # Check if it's < 500 kb (Thermal Image)
+                    temp_path = (root + '/' + file)
+                    img_number += 1
+                    os.rename(temp_path, output_path + '/Processed_IMG_{}.jpg'.format(img_number)) # Rename it and move it to the output directory
 
     subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
 
