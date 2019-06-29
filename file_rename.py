@@ -33,15 +33,15 @@ def main(): # Define the main function
     img_number = 0 # Image counter for naming the images
 
     output_path = askdirectory(title='Choose Output Directory') + "/output"
+
     os.mkdir(output_path)
 
     for root, dirs, files in os.walk(search_path, topdown=False): # Walk through all directories found within the search path
         for file in files: # Loop all files found
             if '.jpg' in file.lower() or '.jpeg' in file.lower(): # If the file is a .jpg / .jpeg
                 if os.path.getsize(root + '/' + file) / 1000 < 500: # Check if it's < 500 kb (Thermal Image)
-                    temp_path = (root + '/' + file)
                     img_number += 1
-                    os.rename(temp_path, output_path + '/Processed_IMG_{}.jpg'.format(img_number)) # Rename it and move it to the output directory
+                    os.rename(root + '/' + file, output_path + '/Processed_IMG_{}.jpg'.format(img_number)) # Rename it and move it to the output directory
 
     subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
 
