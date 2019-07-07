@@ -8,7 +8,21 @@
 # Area Selection
 
 import pyautogui
+from pynput import mouse
 import math
+
+color = None
+
+def on_click(x, y, button, pressed):
+    # On mouse click, get the color under the mouse
+    img = pyautogui.screenshot()
+    coordinates = (x,y)
+    color = img.getpixel(coordinates)
+    print("Color Values: {}".format(color))
+
+    if not pressed:
+    # Stop listener
+        return False
 
 # Get the color of the pixel the mouse cursor is over and correlate this to a temperature in Celsius
 def run():
@@ -20,6 +34,8 @@ def run():
     # Take the screenshot of of the screen & then get the color of the pixel under the mouse pointer
     img = pyautogui.screenshot()
     color = img.getpixel(pyautogui.position()) # Outputs a tuple of rgb()
+    with mouse.Listener(on_click=on_click) as listener:
+        listener.join()
 
     if not (color[0] == color[1] == color[2]):
         print("Color was not grayscale, run the program again over a grayscale image.")
