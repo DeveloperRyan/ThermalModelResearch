@@ -41,6 +41,6 @@ def main(): # Define the main function
                     img_number += 1
                     os.rename(root + '/' + file, output_path + '/{}_Processed_IMG_{}.jpg'.format(os.path.getmtime(root + '/' + file), img_number)) # Rename it and move it to the output directory
 
-    # subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
+    subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
 
 main() # Run the main function
