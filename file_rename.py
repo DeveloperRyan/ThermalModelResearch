@@ -1,6 +1,5 @@
 import os # os library used to perform OS functions like getting path and renaming
 import subprocess # library used for launching processes seperate from python, eg. File Explorer
-
 # Tkinter modules for selecting file input / output
 from tkinter import Tk
 from tkinter.filedialog import askdirectory
@@ -33,7 +32,6 @@ def main(): # Define the main function
     img_number = 0 # Image counter for naming the images
 
     output_path = askdirectory(title='Choose Output Directory') + "/output"
-
     os.mkdir(output_path)
 
     for root, dirs, files in os.walk(search_path, topdown=False): # Walk through all directories found within the search path
@@ -41,8 +39,8 @@ def main(): # Define the main function
             if '.jpg' in file.lower() or '.jpeg' in file.lower(): # If the file is a .jpg / .jpeg
                 if os.path.getsize(root + '/' + file) / 1000 < 500: # Check if it's < 500 kb (Thermal Image)
                     img_number += 1
-                    os.rename(root + '/' + file, output_path + '/Processed_IMG_{}.jpg'.format(img_number)) # Rename it and move it to the output directory
+                    os.rename(root + '/' + file, output_path + '/{}_Processed_IMG_{}.jpg'.format(os.path.getmtime(root + '/' + file), img_number)) # Rename it and move it to the output directory
 
-    subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
+    # subprocess.call(['explorer',output_path.replace('/','\\')]) # Open the output directory once the program completes
 
 main() # Run the main function
